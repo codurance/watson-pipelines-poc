@@ -28,7 +28,7 @@ resource "azurerm_network_security_group" "sg" {
   }
 }
 
-resource "azurerm_subnet_network_security_group_association" "example" {
+resource "azurerm_subnet_network_security_group_association" "nsga" {
   subnet_id                 = azurerm_subnet.sub.id
   network_security_group_id = azurerm_network_security_group.sg.id
 }
