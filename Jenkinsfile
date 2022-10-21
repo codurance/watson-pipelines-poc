@@ -28,7 +28,9 @@ pipeline {
         }
 
         stage ('Trigger CD') {
-            build job: 'CD'
+            steps {
+                build job: 'CD'
+            }
         }
     }
 }
