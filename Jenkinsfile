@@ -27,10 +27,10 @@ pipeline {
             }
         }
 
-        stage ('Trigger CD') {
+        stage ('CD pipeline (manual step)') {
             steps {
                 input "Start cd pipeline?"
-                build job: 'CD'
+                build job: 'cd'
             }
         }
     }
