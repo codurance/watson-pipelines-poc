@@ -1,0 +1,38 @@
+pipeline {
+
+    agent any
+
+    stages {
+        stage('Validate') {
+            steps {
+                script {
+                    sh 'echo validate stage done'
+                }
+            }
+        }
+
+        stage('Plan') {
+            steps {
+                script {
+                    sh 'echo plan stage done'
+                }
+            }
+        }
+
+        stage('Apply') {
+            steps {
+                script {
+                    sh 'echo apply stage done'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    sh 'echo deploy stage done'
+                }
+            }
+        }
+    }
+}

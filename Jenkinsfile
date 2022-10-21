@@ -26,5 +26,9 @@ pipeline {
                 }
             }
         }
+
+        stage ('Trigger CD') {
+            build job: 'CD'
+        }
     }
 }
