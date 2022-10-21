@@ -29,6 +29,7 @@ pipeline {
 
         stage ('Trigger CD') {
             steps {
+                input "Start cd pipeline?"
                 build job: 'CD'
             }
         }
