@@ -27,7 +27,7 @@ pipeline {
             }
         }
 
-        stage ('CD pipeline (manual step)') {
+        stage('CD pipeline (manual step)') {
             steps {
                 input "Start cd pipeline?"
                 build job: 'cd'
