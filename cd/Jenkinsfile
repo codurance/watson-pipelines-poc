@@ -30,6 +30,9 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
+                    sh 'mkdir -p /var/lib/jenkins/.ssh'
+                    sh 'touch /var/lib/jenkins/.ssh/known_hosts'
+                    sh 'ssh-keyscan -H dev-watson-app-vm >> /var/lib/jenkins/.ssh/known_hosts'
                     sh 'ansible-playbook cd/playbooks/playbook.yml -i cd/playbooks/inventory.ini -e "ansible_ssh_password=P4ssword"'
                 }
             }
