@@ -2,20 +2,20 @@
 .DS_Store
 
 # Terraform
-terraform.tfstate
-terraform.tfstate.backup
-terraform.tfvars
 .terraform
+*.tfstate
+*.tfstate.*
+*.tfvars
 .terraform.lock.hcl
-.terraform.tfstate.lock.info
 plan.out
 
+# IntelliJ
+.idea
 
+# Java
+*.class
+*.jar
 
-
-
-
-
-
-
-
+# Gradle
+.gradle
+build
