@@ -30,7 +30,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    sh 'ansible-playbook cd/playbooks/playbook.yml -i cd/playbooks/inventory.ini -e "ansible_password=P4ssword"'
+                    sh 'ansible-playbook cd/playbooks/playbook.yml -i cd/playbooks/inventory.ini -e "ansible_ssh_password=P4ssword"'
                 }
             }
         }
