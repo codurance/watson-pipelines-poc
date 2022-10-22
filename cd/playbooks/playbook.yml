@@ -3,9 +3,11 @@
 - name: update web servers
   hosts: app-vms
   remote_user: adminuser
+  vars:
+    user_home: /home/adminuser
 
   tasks:
   - name: create sample file
     file:
-      path: "{{ ansible_env.PWD }}/test.txt"
+      path: "{{ user_home }}/test.txt"
       state: touch
