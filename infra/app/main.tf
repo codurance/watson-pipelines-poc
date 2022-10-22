@@ -2,8 +2,8 @@ resource "azurerm_linux_virtual_machine" "vm" {
   name                            = "${local.prefix}-vm"
   resource_group_name             = local.jenkins_rg_name
   location                        = local.jenkins_rg_location
-  size                            = "Standard_D2s_v3"
-  admin_username                  = "adminuser"
+  size                            = var.vm_size
+  admin_username                  = var.vm_admin_username
   admin_password                  = var.admin_password
   disable_password_authentication = false
   network_interface_ids = [
@@ -13,14 +13,14 @@ resource "azurerm_linux_virtual_machine" "vm" {
   custom_data = filebase64("templates/bootstrap.tftpl")
 
   os_disk {
-    caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
+    caching              = var.vm_disk_caching
+    storage_account_type = var.vm_disk_storage_type
   }
 
   source_image_reference {
-    publisher = "canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts-gen2"
-    version   = "latest"
+    publisher = var.vm_publisher
+    offer     = var.vm_offer
+    sku       = var.vm_sku
+    version   = var.vm_version
   }
 }

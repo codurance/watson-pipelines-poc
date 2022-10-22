@@ -2,7 +2,7 @@ resource "azurerm_subnet" "sub" {
   name                 = "${local.prefix}-sub"
   resource_group_name  = local.jenkins_rg_name
   virtual_network_name = local.jenkins_vn_name
-  address_prefixes     = ["10.0.10.0/24"]
+  address_prefixes     = var.address_prefixes
 }
 
 resource "azurerm_public_ip" "pip" {
@@ -24,6 +24,3 @@ resource "azurerm_network_interface" "nic" {
     public_ip_address_id          = azurerm_public_ip.pip.id
   }
 }
-
-
-
