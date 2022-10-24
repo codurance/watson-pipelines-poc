@@ -5,6 +5,9 @@ import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.eq;
 import static org.mockito.BDDMockito.willAnswer;
 
+import com.watson.app1.employees.get.GetEmployeeInput;
+import com.watson.app1.employees.get.GetEmployeeRequest;
+import com.watson.app1.employees.get.GetEmployeeResponse;
 import com.watson.app1.employees.getall.GetAllEmployeesInput;
 import com.watson.app1.employees.getall.GetAllEmployeesResponse;
 import java.util.Arrays;
@@ -20,13 +23,15 @@ public class EmployeesServiceShould {
 
   @Mock
   private GetAllEmployeesInput getAllEmployees;
+  @Mock
+  private GetEmployeeInput getEmployee;
   private EmployeeParser employeeParser;
   private EmployeesService service;
 
   @BeforeEach
   public void setup() {
     employeeParser = new EmployeeParser();
-    service = new EmployeesService(getAllEmployees, employeeParser);
+    service = new EmployeesService(getAllEmployees, getEmployee, employeeParser);
   }
 
   @Test
@@ -40,5 +45,18 @@ public class EmployeesServiceShould {
     List<Employee> actual = service.getAll();
 
     assertThat(actual).hasSameElementsAs(expected.getEmployees());
+  }
+
+  @Test
+  void getEmployee() {
+    int id = 1;
+    GetEmployeeResponse expected = new GetEmployeeResponse(new Employee(id, "Ben Dover"));
+    willAnswer(i -> {
+      employeeParser.processResponse(expected);
+      return null;
+    }).given(getEmployee).execute(new GetEmployeeRequest(id), employeeParser);
+    Employee actual = service.getEmployee(id);
+
+    assertThat(actual).isEqualTo(expected.getEmployee());
   }
 }

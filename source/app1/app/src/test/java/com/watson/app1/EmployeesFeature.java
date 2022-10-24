@@ -3,6 +3,7 @@ package com.watson.app1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
+import com.watson.app1.employees.get.GetEmployee;
 import com.watson.app1.employees.getall.GetAllEmployees;
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +22,8 @@ public class EmployeesFeature {
 
   @BeforeEach
   public void setUp() {
-    service = new EmployeesService(new GetAllEmployees(employeesRepository), new EmployeeParser());
+    service = new EmployeesService(new GetAllEmployees(employeesRepository),
+        new GetEmployee(employeesRepository), new EmployeeParser());
   }
 
   @Test
@@ -34,5 +36,16 @@ public class EmployeesFeature {
     List<Employee> actual = service.getAll();
 
     assertThat(actual).hasSameElementsAs(expected);
+  }
+
+  @Test
+  void shouldReturnEmployeeById() {
+    int id = 1;
+    Employee expected = new Employee(id, "Ben Dover");
+    given(employeesRepository.findById(id)).willReturn(expected);
+
+    Employee actual = service.getEmployee(id);
+
+    assertThat(actual).isEqualTo(expected);
   }
 }
