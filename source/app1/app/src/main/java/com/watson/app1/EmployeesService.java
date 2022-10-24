@@ -8,9 +8,9 @@ import java.util.List;
 
 public class EmployeesService {
 
-  private GetAllEmployeesInput getAllEmployees;
-  private GetEmployeeInput getEmployee;
-  private EmployeeParser parser;
+  private final GetAllEmployeesInput getAllEmployees;
+  private final GetEmployeeInput getEmployee;
+  private final EmployeeParser parser;
 
   public EmployeesService(GetAllEmployeesInput getAllEmployees, GetEmployeeInput getEmployee,
       EmployeeParser parser) {

@@ -6,7 +6,7 @@ import com.watson.app1.employees.EmployeeNotFound;
 
 public class GetEmployee implements GetEmployeeInput {
 
-  private EmployeesRepository employeesRepository;
+  private final EmployeesRepository employeesRepository;
 
   public GetEmployee(EmployeesRepository employeesRepository) {
     this.employeesRepository = employeesRepository;

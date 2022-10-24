@@ -12,7 +12,7 @@ import com.watson.app1.employees.get.GetEmployeeRequest;
 import com.watson.app1.employees.get.GetEmployeeResponse;
 import com.watson.app1.employees.getall.GetAllEmployeesInput;
 import com.watson.app1.employees.getall.GetAllEmployeesResponse;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,9 +37,9 @@ public class EmployeesServiceShould {
   }
 
   @Test
-  public void getAllEmployees() throws Exception {
+  public void getAllEmployees() {
     GetAllEmployeesResponse expected = new GetAllEmployeesResponse(
-        Arrays.asList(new Employee(1, "Ben Dover")));
+        Collections.singletonList(new Employee(1, "Ben Dover")));
     willAnswer(i -> {
       employeeParser.processResponse(expected);
       return null;

@@ -28,7 +28,7 @@ public class EmployeesFeature {
   }
 
   @Test
-  public void shouldReturnEmployees() throws Exception {
+  public void shouldReturnEmployees() {
     List<Employee> expected = Arrays.asList(new Employee(1, "Ben Dover"),
         new Employee(2, "Anne Chovee"));
     given(employeesRepository.findAll())

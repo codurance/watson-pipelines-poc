@@ -2,6 +2,7 @@ package com.watson.app1.employees.getall;
 
 import com.watson.app1.Employee;
 import java.util.List;
+import java.util.Objects;
 
 public class GetAllEmployeesResponse {
 
@@ -16,37 +17,26 @@ public class GetAllEmployeesResponse {
   }
 
   @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((employees == null) ? 0 : employees.hashCode());
-    return result;
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    GetAllEmployeesResponse that = (GetAllEmployeesResponse) o;
+    return Objects.equals(getEmployees(), that.getEmployees());
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    GetAllEmployeesResponse other = (GetAllEmployeesResponse) obj;
-    if (employees == null) {
-      if (other.employees != null) {
-        return false;
-      }
-    } else if (!employees.equals(other.employees)) {
-      return false;
-    }
-    return true;
+  public int hashCode() {
+    return Objects.hash(getEmployees());
   }
 
   @Override
   public String toString() {
-    return "GetAllEmployeesResponse [employees=" + employees + "]";
+    return "GetAllEmployeesResponse{" +
+        "employees=" + employees +
+        '}';
   }
 }
