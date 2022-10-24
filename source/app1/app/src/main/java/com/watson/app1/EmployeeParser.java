@@ -1,5 +1,6 @@
 package com.watson.app1;
 
+import com.watson.app1.employees.EmployeeNotFound;
 import com.watson.app1.employees.get.GetEmployeeOutput;
 import com.watson.app1.employees.get.GetEmployeeResponse;
 import com.watson.app1.employees.getall.GetAllEmployeesOutput;
@@ -19,6 +20,11 @@ public class EmployeeParser implements GetAllEmployeesOutput, GetEmployeeOutput 
   @Override
   public void processResponse(GetEmployeeResponse response) {
     employees = Collections.singletonList(response.getEmployee());
+  }
+
+  @Override
+  public void processResponse(EmployeeNotFound error) {
+    throw new EmployeeNotAvailable(error);
   }
 
   public List<Employee> getEmployees() {

@@ -2,6 +2,7 @@ package com.watson.app1.employees.get;
 
 import com.watson.app1.Employee;
 import com.watson.app1.EmployeesRepository;
+import com.watson.app1.employees.EmployeeNotFound;
 
 public class GetEmployee implements GetEmployeeInput {
 
@@ -14,6 +15,11 @@ public class GetEmployee implements GetEmployeeInput {
   @Override
   public void execute(GetEmployeeRequest getEmployeeRequest, GetEmployeeOutput output) {
     Employee employee = employeesRepository.findById(getEmployeeRequest.getId());
-    output.processResponse(new GetEmployeeResponse(employee));
+
+    if (employee == null) {
+      output.processResponse(new EmployeeNotFound(getEmployeeRequest.getId()));
+    } else {
+      output.processResponse(new GetEmployeeResponse(employee));
+    }
   }
 }

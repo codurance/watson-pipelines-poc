@@ -1,10 +1,12 @@
 package com.watson.app1;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.eq;
 import static org.mockito.BDDMockito.willAnswer;
 
+import com.watson.app1.employees.EmployeeNotFound;
 import com.watson.app1.employees.get.GetEmployeeInput;
 import com.watson.app1.employees.get.GetEmployeeRequest;
 import com.watson.app1.employees.get.GetEmployeeResponse;
@@ -58,5 +60,16 @@ public class EmployeesServiceShould {
     Employee actual = service.getEmployee(id);
 
     assertThat(actual).isEqualTo(expected.getEmployee());
+  }
+
+  @Test
+  void shouldThrowExceptionIfEmployeeDoesNotExist() {
+    int id = 1;
+    willAnswer(i -> {
+      employeeParser.processResponse(new EmployeeNotFound(id));
+      return null;
+    }).given(getEmployee).execute(new GetEmployeeRequest(id), employeeParser);
+
+    assertThatThrownBy(() -> service.getEmployee(id)).isInstanceOf(EmployeeNotAvailable.class);
   }
 }

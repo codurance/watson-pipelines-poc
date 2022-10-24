@@ -1,6 +1,7 @@
 package com.watson.app1;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
 import com.watson.app1.employees.get.GetEmployee;
@@ -47,5 +48,13 @@ public class EmployeesFeature {
     Employee actual = service.getEmployee(id);
 
     assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test
+  void shouldThrowExceptionIfEmployeeDoesNotExist() {
+    int id = 1;
+    given(employeesRepository.findById(id)).willReturn(null);
+
+    assertThatThrownBy(() -> service.getEmployee(id)).isInstanceOf(EmployeeNotAvailable.class);
   }
 }
