@@ -15,3 +15,9 @@ echo \
 apt update
 apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 usermod -aG docker adminuser
+
+# Install pip and all of the pip packages Ansible will need to run its Docker Compose module
+
+apt install -y python3-pip
+pip install docker
+pip install docker-compose

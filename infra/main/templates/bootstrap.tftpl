@@ -68,3 +68,10 @@ apt install -y azure-cli
 add-apt-repository --yes ppa:ansible/ansible
 apt update
 apt install ansible -y
+
+# Install the Ansible Community Docker module under the Jenkins user
+# to be able to use the Ansible Docker Compose module
+
+sudo -i -u jenkins bash -xev << EOF
+ansible-galaxy collection install community.docker
+EOF
