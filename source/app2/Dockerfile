@@ -9,6 +9,15 @@ FROM openjdk:8-jdk-alpine
 
 COPY --from=builder /app/build/libs/app.jar /app.jar
 
+ENV EMPLOYEES_URL_PROTOCOL="http"
+ENV EMPLOYEES_URL_HOST="employees"
+ENV EMPLOYEES_URL_PORT="4567"
+
 EXPOSE 4567
 
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+ENTRYPOINT ["java", \
+            "-DEMPLOYEES_URL_PROTOCOL=$EMPLOYEES_URL_PROTOCOL", \
+            "-DEMPLOYEES_URL_HOST=$EMPLOYEES_URL_HOST", \
+            "-DEMPLOYEES_URL_PORT=$EMPLOYEES_URL_PORT", \
+            "-jar", \
+            "/app.jar"]

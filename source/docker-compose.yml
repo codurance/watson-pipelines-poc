@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+
+  employees:
+    build: app1
+    image: employees
+    container_name: employees
+    ports:
+      - 8080:4567
+
+  payroll:
+    build: app2
+    image: payroll
+    container_name: payroll
+    ports:
+      - 8081:4567
+    environment:
+      - EMPLOYEES_URL_PROTOCOL=http
+      - EMPLOYEES_URL_HOST=employees
+      - EMPLOYEES_URL_PORT=4567

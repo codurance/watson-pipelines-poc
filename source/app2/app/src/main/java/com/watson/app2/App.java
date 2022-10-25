@@ -15,11 +15,8 @@ public class App {
   public static void main(String[] args) {
     App app = new App();
 
-    String protocol = "http";
-    String host = "localhost";
-    String port = "8080";
-    String url = String.format("%s://%s:%s", protocol, host, port);
-    EmployeesRepository employeesRepository = new EmployeesRepository(url);
+    EmployeesRepository employeesRepository = new EmployeesRepository(
+        app.constructEmployeesUrlFromEnvVars());
     PayrollRepository payrollRepository = new PayrollRepository();
     PayrollService service = new PayrollService(employeesRepository, payrollRepository);
 
@@ -29,6 +26,16 @@ public class App {
             .build();
 
     get("/payroll/:id", (req, res) -> app.getPayrollForId(req, res, service, moshi));
+  }
+
+  private String constructEmployeesUrlFromEnvVars() {
+    String protocol = System.getenv("EMPLOYEES_URL_PROTOCOL");
+    String host = System.getenv("EMPLOYEES_URL_HOST");
+    String port = System.getenv("EMPLOYEES_URL_PORT");
+    String url = String.format("%s://%s:%s", protocol, host, port);
+
+    System.out.println(String.format("EMPLOYEES URL => %s", url));
+    return url;
   }
 
   private Object getPayrollForId(Request req, Response res, PayrollService service, Moshi moshi) {
