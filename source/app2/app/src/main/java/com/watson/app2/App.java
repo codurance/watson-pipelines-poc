@@ -8,6 +8,8 @@ import java.time.format.DateTimeFormatter;
 import com.squareup.moshi.FromJson;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.ToJson;
+import spark.Request;
+import spark.Response;
 
 public class App {
     private static final String EMPLOYEES_URL = "EMPLOYEES_URL";
@@ -18,17 +20,20 @@ public class App {
         EmployeesRepository employeesRepository = new EmployeesRepository(url);
         PayrollRepository payrollRepository = new PayrollRepository();
         PayrollService service = new PayrollService(employeesRepository, payrollRepository);
-        Moshi moshi = 
+
+        Moshi moshi =
             new Moshi.Builder()
                 .add(new LocalDateAdapter())
                 .build();
 
-        get("/payroll/:id", (req, res) -> {
-            int id = Integer.parseInt(req.params(":id"));
-            res.header("Content-Type", "application/json");
-            PayrollReport report = service.getPayrollFor(id);
-            return moshi.adapter(PayrollReport.class).toJson(report);
-        });
+        get("/payroll/:id", (req, res) -> app.getPayrollForId(req, res, service, moshi));
+    }
+
+    private Object getPayrollForId(Request req, Response res, PayrollService service, Moshi moshi) {
+        int id = Integer.parseInt(req.params(":id"));
+        res.header("Content-Type", "application/json");
+        PayrollReport report = service.getPayrollFor(id);
+        return moshi.adapter(PayrollReport.class).toJson(report);
     }
 
     private static class LocalDateAdapter {
