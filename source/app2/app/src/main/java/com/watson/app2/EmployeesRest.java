@@ -5,6 +5,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface EmployeesRest {
-    @GET("/employees/{id}")
-    Call<Employee> byId(@Path("id") int id);
+
+  @GET("/employees/{id}")
+  Call<Employee> byId(@Path("id") int id);
 }
