@@ -14,7 +14,11 @@ public class App {
 
   public static void main(String[] args) {
     App app = new App();
-    String url = "http://localhost:8080";
+
+    String protocol = "http";
+    String host = "localhost";
+    String port = "8080";
+    String url = String.format("%s://%s:%s", protocol, host, port);
     EmployeesRepository employeesRepository = new EmployeesRepository(url);
     PayrollRepository payrollRepository = new PayrollRepository();
     PayrollService service = new PayrollService(employeesRepository, payrollRepository);
