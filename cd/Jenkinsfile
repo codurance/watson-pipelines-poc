@@ -58,5 +58,15 @@ pipeline {
                 }
             }
         }
+
+        stage('Destroy') {
+            steps {
+                script {
+                    dir('infra/app') {
+                        sh 'make destroy'
+                    }
+                }
+            }
+        }
     }
 }
