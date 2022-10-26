@@ -63,6 +63,10 @@ echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO 
 apt update
 apt install -y azure-cli
 
+# Install Make
+
+apt install -y make
+
 # Install Ansible
 
 add-apt-repository --yes ppa:ansible/ansible
