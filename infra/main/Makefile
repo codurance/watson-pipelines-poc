@@ -32,7 +32,7 @@ plan:
 	terraform plan -out=tfplan
 
 apply:
-	terraform apply -auto-approve tfplan
+	terraform apply tfplan
 
 destroy:
-	terraform destroy -auto-approve
+	terraform destroy

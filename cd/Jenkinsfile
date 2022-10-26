@@ -41,7 +41,7 @@ pipeline {
                 input 'Start?'
                 script {
                     dir('infra/app') {
-                        sh 'make apply'
+                        sh 'make apply-auto-approve'
                     }
                 }
             }
@@ -64,7 +64,7 @@ pipeline {
                 input 'Start?'
                 script {
                     dir('infra/app') {
-                        sh 'make destroy'
+                        sh 'make destroy-auto-approve'
                     }
                 }
             }
