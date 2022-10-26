@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             parallel {
-                stage('Employees') {
+                stage('Build Employees') {
                     steps {
                         script {
                             dir('source/app1') {
@@ -14,7 +14,7 @@ pipeline {
                     }
                 }
 
-                stage('Payroll') {
+                stage('Build Payroll') {
                     steps {
                         script {
                             dir('source/app2') {
@@ -27,9 +27,25 @@ pipeline {
         }
 
         stage('Test') {
-            steps {
-                script {
-                    sh 'echo test stage done'
+            parallel {
+                stage('Test Employees') {
+                    steps {
+                        script {
+                            dir('source/app1') {
+                                sh './gradlew test'
+                            }
+                        }
+                    }
+                }
+
+                stage('Test Payroll') {
+                    steps {
+                        script {
+                            dir('source/app2') {
+                                sh './gradlew test'
+                            }
+                        }
+                    }
                 }
             }
         }
