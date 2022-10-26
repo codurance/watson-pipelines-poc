@@ -7,7 +7,7 @@
 *.tfstate.*
 *.tfvars
 .terraform.lock.hcl
-plan.out
+tfplan
 
 # IntelliJ
 .idea

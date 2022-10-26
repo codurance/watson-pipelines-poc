@@ -27,10 +27,10 @@ validate:
 	terraform validate
 
 plan:
-	terraform plan
+	terraform plan -out=tfplan
 
 apply:
-	terraform apply
+	terraform apply -auto-approve tfplan
 
 destroy:
-	terraform destroy
+	terraform destroy -auto-approve
