@@ -1,6 +1,6 @@
 ---
 
-- name: update web servers
+- name: Deploy the Employees App
   hosts: app-vms
   remote_user: adminuser
   vars:
