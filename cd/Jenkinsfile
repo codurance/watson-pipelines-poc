@@ -1,12 +1,23 @@
 pipeline {
-
     agent any
 
     stages {
+        stage('Initialize') {
+            steps {
+                script {
+                    dir('infra/app') {
+                        sh 'make init'
+                    }
+                }
+            }
+        }
+
         stage('Validate') {
             steps {
                 script {
-                    sh 'echo validate stage done'
+                    dir('infra/app') {
+                        sh 'make validate'
+                    }
                 }
             }
         }
@@ -14,7 +25,9 @@ pipeline {
         stage('Plan') {
             steps {
                 script {
-                    sh 'echo plan stage done'
+                    dir('infra/app') {
+                        sh 'make plan'
+                    }
                 }
             }
         }
@@ -23,7 +36,9 @@ pipeline {
             steps {
                 input 'Start stage?'
                 script {
-                    sh 'echo apply stage done'
+                    dir('infra/app') {
+                        sh 'make apply'
+                    }
                 }
             }
         }
