@@ -3,10 +3,20 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
-            steps {
-                script {
-                    sh 'echo build stage done'
+        parallel{
+            stage('Build Employees') {
+                steps {
+                    script {
+                        sh 'echo build employees done'
+                    }
+                }
+            }
+
+            stage('Build Payroll') {
+                steps {
+                    script {
+                        sh 'echo build payroll done'
+                    }
                 }
             }
         }
