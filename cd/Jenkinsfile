@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        TF_CLI_ARGS = '-no-color'
+        TF_CLI_ARGS = '-no-color -auto-approve'
     }
 
     stages {
@@ -41,7 +41,7 @@ pipeline {
                 input 'Start?'
                 script {
                     dir('infra/app') {
-                        sh 'make apply-auto-approve'
+                        sh 'make apply'
                     }
                 }
             }
@@ -64,7 +64,7 @@ pipeline {
                 input 'Start?'
                 script {
                     dir('infra/app') {
-                        sh 'make destroy-auto-approve'
+                        sh 'make destroy'
                     }
                 }
             }
