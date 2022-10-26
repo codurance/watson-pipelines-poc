@@ -21,6 +21,7 @@ pipeline {
 
         stage('Apply') {
             steps {
+                input 'Start stage?'
                 script {
                     sh 'echo apply stage done'
                 }
@@ -29,6 +30,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
+                input 'Start deploy?'
                 script {
                     sh 'mkdir -p /var/lib/jenkins/.ssh'
                     sh 'touch /var/lib/jenkins/.ssh/known_hosts'
