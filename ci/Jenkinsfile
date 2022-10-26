@@ -51,9 +51,25 @@ pipeline {
         }
 
         stage('Deploy') {
-            steps {
-                script {
-                    sh 'echo deploy stage done'
+            parallel {
+                stage('Deploy Employees') {
+                    steps {
+                        script {
+                            dir('source/app1') {
+                                sh 'TODO'
+                            }
+                        }
+                    }
+                }
+
+                stage('Deploy Payroll') {
+                    steps {
+                        script {
+                            dir('source/app2') {
+                                sh 'TODO'
+                            }
+                        }
+                    }
                 }
             }
         }
