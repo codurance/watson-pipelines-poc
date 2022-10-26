@@ -38,7 +38,7 @@ pipeline {
 
         stage('Apply') {
             steps {
-                input 'Start stage?'
+                input 'Start?'
                 script {
                     dir('infra/app') {
                         sh 'make apply'
@@ -49,7 +49,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                input 'Start deploy?'
+                input 'Start?'
                 script {
                     sh 'mkdir -p /var/lib/jenkins/.ssh'
                     sh 'touch /var/lib/jenkins/.ssh/known_hosts'
@@ -61,6 +61,7 @@ pipeline {
 
         stage('Destroy') {
             steps {
+                input 'Start?'
                 script {
                     dir('infra/app') {
                         sh 'make destroy'
