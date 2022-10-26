@@ -3,14 +3,14 @@ version: "3.9"
 services:
 
   employees:
-    build: app1
+    build: employees
     image: employees
     container_name: employees
     ports:
       - 7070:4567
 
   payroll:
-    build: app2
+    build: payroll
     image: payroll
     container_name: payroll
     ports:

@@ -7,7 +7,7 @@ pipeline {
                 stage('Build Employees') {
                     steps {
                         script {
-                            dir('source/app1') {
+                            dir('source/employees') {
                                 sh './gradlew clean build jar'
                             }
                         }
@@ -17,7 +17,7 @@ pipeline {
                 stage('Build Payroll') {
                     steps {
                         script {
-                            dir('source/app2') {
+                            dir('source/payroll') {
                                 sh './gradlew clean build jar'
                             }
                         }
@@ -31,7 +31,7 @@ pipeline {
                 stage('Test Employees') {
                     steps {
                         script {
-                            dir('source/app1') {
+                            dir('source/employees') {
                                 sh './gradlew test'
                             }
                         }
@@ -41,7 +41,7 @@ pipeline {
                 stage('Test Payroll') {
                     steps {
                         script {
-                            dir('source/app2') {
+                            dir('source/payroll') {
                                 sh './gradlew test'
                             }
                         }
@@ -55,7 +55,7 @@ pipeline {
                 stage('Deploy Employees') {
                     steps {
                         script {
-                            dir('source/app1') {
+                            dir('source/employees') {
                                 sh 'echo TODO'
                             }
                         }
@@ -65,7 +65,7 @@ pipeline {
                 stage('Deploy Payroll') {
                     steps {
                         script {
-                            dir('source/app2') {
+                            dir('source/payroll') {
                                 sh 'echo TODO'
                             }
                         }

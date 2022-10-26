@@ -11,11 +11,3 @@ tfplan
 
 # IntelliJ
 .idea
-
-# Java
-*.class
-*.jar
-
-# Gradle
-.gradle
-build
