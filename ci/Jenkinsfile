@@ -56,7 +56,7 @@ pipeline {
                     steps {
                         script {
                             dir('source/app1') {
-                                sh 'TODO'
+                                sh 'echo TODO'
                             }
                         }
                     }
@@ -66,7 +66,7 @@ pipeline {
                     steps {
                         script {
                             dir('source/app2') {
-                                sh 'TODO'
+                                sh 'echo TODO'
                             }
                         }
                     }
