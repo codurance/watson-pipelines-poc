@@ -2,7 +2,9 @@ pipeline {
     agent any
 
     environment {
-        TF_CLI_ARGS = "-no-color -auto-approve"
+        TF_CLI_ARGS = "-no-color"
+        TF_CLI_ARGS_apply = "-auto-approve"
+        TF_CLI_ARGS_destroy = "-auto-approve"
     }
 
     parameters {
