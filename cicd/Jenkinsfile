@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    parameters {
+        booleanParam(name: "CREATE_INFRA", defaultValue: true)
+    }
+
     stages {
         stage('Build') {
             parallel {
@@ -50,7 +54,7 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy Containers') {
             parallel {
                 stage('Deploy Employees') {
                     steps {
@@ -74,10 +78,26 @@ pipeline {
             }
         }
 
-        stage('Start CD') {
+        stage('Create Infra') {
+            when {
+                environment name: "CREATE_INFRA", value: "true"
+            }
+
             steps {
-                input 'Start CD pipeline?'
-                build job: 'cd'
+                input 'Start?'
+                build job: 'infra'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                input 'Start?'
+                script {
+                    sh 'mkdir -p /var/lib/jenkins/.ssh'
+                    sh 'touch /var/lib/jenkins/.ssh/known_hosts'
+                    sh 'ssh-keyscan -H dev-watson-app-vm >> /var/lib/jenkins/.ssh/known_hosts'
+                    sh 'ansible-playbook cicd/playbooks/playbook.yml -i cicd/playbooks/inventory.ini -e "ansible_ssh_password=P4ssword"'
+                }
             }
         }
     }
