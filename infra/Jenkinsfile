@@ -16,7 +16,15 @@ pipeline {
             steps {
                 script {
                     dir('infra/app') {
-                        sh 'make init'
+                        withCredentials([
+                            string(credentialsId: 'TF_VAR_admin_password', variable: 'TF_VAR_admin_password'),
+                            string(credentialsId: 'TF_VAR_subscription_id', variable: 'TF_VAR_subscription_id'),
+                            string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'),
+                            string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET'),
+                            string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'),
+                            string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID') ]) {
+                                sh 'make init'
+                        }
                     }
                 }
             }
@@ -26,7 +34,15 @@ pipeline {
             steps {
                 script {
                     dir('infra/app') {
-                        sh 'make validate'
+                        withCredentials([
+                            string(credentialsId: 'TF_VAR_admin_password', variable: 'TF_VAR_admin_password'),
+                            string(credentialsId: 'TF_VAR_subscription_id', variable: 'TF_VAR_subscription_id'),
+                            string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'),
+                            string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET'),
+                            string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'),
+                            string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID') ]) {
+                                sh 'make validate'
+                        }
                     }
                 }
             }
@@ -36,7 +52,15 @@ pipeline {
             steps {
                 script {
                     dir('infra/app') {
-                        sh 'make plan'
+                        withCredentials([
+                            string(credentialsId: 'TF_VAR_admin_password', variable: 'TF_VAR_admin_password'),
+                            string(credentialsId: 'TF_VAR_subscription_id', variable: 'TF_VAR_subscription_id'),
+                            string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'),
+                            string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET'),
+                            string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'),
+                            string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID') ]) {
+                                sh 'make plan'
+                        }
                     }
                 }
             }
@@ -51,7 +75,15 @@ pipeline {
                 input 'Start?'
                 script {
                     dir('infra/app') {
-                        sh 'make apply'
+                        withCredentials([
+                            string(credentialsId: 'TF_VAR_admin_password', variable: 'TF_VAR_admin_password'),
+                            string(credentialsId: 'TF_VAR_subscription_id', variable: 'TF_VAR_subscription_id'),
+                            string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'),
+                            string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET'),
+                            string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'),
+                            string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID') ]) {
+                                sh 'make apply'
+                        }
                     }
                 }
             }
@@ -66,7 +98,15 @@ pipeline {
                 input 'Start?'
                 script {
                     dir('infra/app') {
-                        sh 'make destroy'
+                        withCredentials([
+                            string(credentialsId: 'TF_VAR_admin_password', variable: 'TF_VAR_admin_password'),
+                            string(credentialsId: 'TF_VAR_subscription_id', variable: 'TF_VAR_subscription_id'),
+                            string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'),
+                            string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET'),
+                            string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'),
+                            string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID') ]) {
+                                sh 'make destroy'
+                        }
                     }
                 }
             }
