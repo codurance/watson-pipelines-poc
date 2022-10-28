@@ -10,7 +10,7 @@ variable "project" {
 
 variable "subscription_id" {
   type        = string
-  description = "The Azure account subscribtion id."
+  description = "The Azure account subscription id."
 }
 
 variable "address_space" {

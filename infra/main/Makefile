@@ -1,7 +1,6 @@
 #!make
 export TF_VAR_environment := dev
 export TF_VAR_project := watson
-export TF_VAR_subscription_id := edb907a0-34b8-47cc-a65b-9ae69c0b6398
 
 # State Variables
 STATE_PREFIX := ${TF_VAR_environment}-${TF_VAR_project}
