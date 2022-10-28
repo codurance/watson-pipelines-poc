@@ -13,6 +13,19 @@ Log into Azure to be able to use the `az` CLI and Terraform:
 az login
 ```
 
+# Update the TFVARS
+
+Create a `terraform.tfvars` file and fill it in with the following variables:
+
+```bash
+touch terraform.tfvars
+
+echo "
+subscription_id = \"<SUBSCRIPTION_ID>\"
+admin_password = \"<ADMIN_PASSWORD>\"
+" > terraform.tfvars
+```
+
 # Create the Azure Infra with Terraform
 
 Initialise, validate and plan the Terraform infra:
