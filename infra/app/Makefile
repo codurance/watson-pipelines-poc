@@ -1,8 +1,6 @@
 #!make
 export TF_VAR_environment := dev
 export TF_VAR_project := watson-app
-export TF_VAR_subscription_id := edb907a0-34b8-47cc-a65b-9ae69c0b6398
-export TF_VAR_admin_password := P4ssword
 
 # State Variables
 PREFIX := ${TF_VAR_environment}-${TF_VAR_project}
