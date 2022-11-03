@@ -60,23 +60,24 @@ pipeline {
                     steps {
                         script {
                             dir('source/employees') {
-                                env.ACR_NAME = "devwatsoncr"
-                                sh 'docker build . -t "$ACR_NAME.azurecr.io/employees"'
+                                withCredentials([
+                                    string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'),,
+                                    string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID'
+                                    string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET')) ]) {
 
-                                try {
-                                    withCredentials([
-                                        string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'),,
-                                        string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID'
-                                        string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET')) ]) {
+                                    env.ACR_NAME = "devwatsoncr"
+                                    sh 'docker build . -t "$ACR_NAME.azurecr.io/employees"'
+
+                                    try {
                                         sh 'az login --service-principal -u "$ARM_CLIENT_ID" --tenant "$ARM_TENANT_ID" -p "$ARM_CLIENT_SECRET"'
+                                        env.TOKEN = sh( script: 'az acr login --name "$ACR_NAME" --expose-token --output tsv --query accessToken', returnStdout: true).trim()
+                                        sh 'docker login myregistry.azurecr.io --username "00000000-0000-0000-0000-000000000000" --password "$TOKEN"'
+                                        sh 'docker push $ACR_NAME.azurecr.io/employees'
+                                    } catch {
+                                        sh 'unset TOKEN'
+                                        sh 'az logout'
+                                        throw
                                     }
-                                    env.TOKEN = sh( script: 'az acr login --name "$ACR_NAME" --expose-token --output tsv --query accessToken', returnStdout: true).trim()
-                                    sh 'docker login myregistry.azurecr.io --username "00000000-0000-0000-0000-000000000000" --password "$TOKEN"'
-                                    sh 'docker push $ACR_NAME.azurecr.io/employees'
-                                } catch {
-                                    sh 'unset TOKEN'
-                                    sh 'az logout'
-                                    throw
                                 }
                             }
                         }
