@@ -61,7 +61,7 @@ pipeline {
                         script {
                             dir('source/employees') {
                                 sh 'echo build image'
-                                docker build
+                                sh 'docker build'
                                 sh 'echo TODO: push image'
                             }
                         }
