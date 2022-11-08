@@ -5,6 +5,10 @@ pipeline {
         booleanParam(name: "CREATE_INFRA", defaultValue: true)
     }
 
+    environment {
+        ACR_NAME = "devwatsoncr"
+    }
+
     stages {
         stage('Build') {
             parallel {
@@ -54,26 +58,21 @@ pipeline {
             }
         }
 
-        stage('Deploy Containers') {
-
-            environment {
-                ACR_NAME = "devwatsoncr"
-            }
-
-            stage('Login') {
-
-                steps {
-                    script {
-                        withCredentials([
-                            string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'),
-                            string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID'),
-                            string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET')
-                        ]) {
-                            sh 'docker login "$ACR_NAME.azurecr.io" --username "$ARM_CLIENT_ID" --password "$ARM_CLIENT_SECRET"'
-                        }
+        stage('Container registry Login') {
+            steps {
+                script {
+                    withCredentials([
+                        string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'),
+                        string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID'),
+                        string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET')
+                    ]) {
+                        sh 'docker login "$ACR_NAME.azurecr.io" --username "$ARM_CLIENT_ID" --password "$ARM_CLIENT_SECRET"'
                     }
                 }
             }
+        }
+
+        stage('Deploy Containers') {
 
             parallel {
                 stage('Deploy Employees') {
