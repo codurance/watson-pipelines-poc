@@ -84,20 +84,24 @@ pipeline {
                     steps {
                         script {
                             dir('source/employees') {
-
-                                sh 'docker build . -t "$EMPLOYEES_IMAGE_TAG"'
-
-                                sh 'docker push "$EMPLOYEES_IMAGE_TAG"'
+                                sh 'docker build . -t "$IMAGE_TAG"'
+                                sh 'docker push "$IMAGE_TAG"'
                             }
                         }
                     }
                 }
 
                 stage('Deploy Payroll') {
+
+                    environment {
+                        IMAGE_TAG = "${ACR_NAME}.azurecr.io/payroll"
+                    }
+
                     steps {
                         script {
                             dir('source/payroll') {
-                                sh 'echo TODO'
+                                sh 'docker build . -t "$IMAGE_TAG"'
+                                sh 'docker push "$IMAGE_TAG"'
                             }
                         }
                     }
