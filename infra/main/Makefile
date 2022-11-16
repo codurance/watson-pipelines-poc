@@ -1,14 +1,18 @@
 #!make
 export TF_VAR_environment := dev
-export TF_VAR_project := watson
+# export TF_VAR_project := watson
+export TF_VAR_project := watson-app-svc
 
 # State Variables
-STATE_PREFIX := ${TF_VAR_environment}-${TF_VAR_project}
+# STATE_PREFIX := ${TF_VAR_environment}-${TF_VAR_project}
+STATE_PREFIX := ${TF_VAR_environment}-watson
 export STATE_RESOURCE_GROUP_NAME := ${STATE_PREFIX}-infrastate-rg
 export STATE_LOCATION := uksouth
-export STATE_STORAGE_ACCOUNT_NAME := ${TF_VAR_environment}${TF_VAR_project}infrastatesa
+# export STATE_STORAGE_ACCOUNT_NAME := ${TF_VAR_environment}${TF_VAR_project}infrastatesa
+export STATE_STORAGE_ACCOUNT_NAME := ${TF_VAR_environment}watsoninfrastatesa
 export STATE_CONTAINER_NAME := ${STATE_PREFIX}-infrastate
 export STATE_APP_CONTAINER_NAME := ${STATE_PREFIX}-app-infrastate
+export STATE_APP_SVC_CONTAINER_NAME := ${STATE_PREFIX}-app-svc-infrastate
 
 default: init validate plan
 
@@ -22,7 +26,7 @@ init:
 	terraform init \
 		-backend-config "resource_group_name=${STATE_RESOURCE_GROUP_NAME}" \
 		-backend-config "storage_account_name=${STATE_STORAGE_ACCOUNT_NAME}" \
-		-backend-config "container_name=${STATE_CONTAINER_NAME}"
+		-backend-config "container_name=${STATE_APP_SVC_CONTAINER_NAME}"
 
 validate:
 	terraform validate

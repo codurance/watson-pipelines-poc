@@ -25,3 +25,7 @@ az storage container create \
 az storage container create \
   --name "$STATE_APP_CONTAINER_NAME" \
   --account-name "$STATE_STORAGE_ACCOUNT_NAME"
+
+az storage container create \
+  --name "$STATE_APP_SVC_CONTAINER_NAME" \
+  --account-name "$STATE_STORAGE_ACCOUNT_NAME"

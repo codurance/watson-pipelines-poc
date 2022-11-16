@@ -3,9 +3,7 @@ version: "3.9"
 services:
 
   payroll:
-    build: payroll
-    image: payroll
-    container_name: payroll
+    image: devwatsonappsvccr.azurecr.io/payroll:latest
     ports:
       - 8080:4567
     environment:
@@ -14,8 +12,4 @@ services:
       - EMPLOYEES_URL_PORT=4567
 
   employees:
-    build: employees
-    image: employees
-    container_name: employees
-    ports:
-      - 7070:4567
+    image: devwatsonappsvccr.azurecr.io/employees:latest
