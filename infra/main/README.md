@@ -55,6 +55,8 @@ docker push devwatsonappsvccr.azurecr.io/payroll
 az webapp create --resource-group dev-watson-app-svc-rg --plan dev-watson-app-svc-sp --name dev-watson-app-svc --multicontainer-config-type compose --multicontainer-config-file docker-compose-app-service.yml
 
 az webapp config container set --docker-registry-server-url devwatsonappsvccr.azurecr.io --name dev-watson-app-svc --resource-group dev-watson-app-svc-rg
+
+az webapp delete --name dev-watson-app-svc --resource-group dev-watson-app-svc-rg --keep-empty-plan
 ```
 
 # Destroy the Azure Infra
