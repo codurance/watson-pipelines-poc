@@ -7,17 +7,36 @@ RUN cd /app && gradle clean build jar
 
 FROM openjdk:8-jdk-alpine
 
+######################## Set up SSH
+
+# The root password must be 'Docker!' - this is what
+# Azure expectes to allow SSH access to an App Service
+RUN apk add openssh \
+    && echo "root:Docker!" | chpasswd
+
+COPY sshd_config /etc/ssh/
+
+COPY ssh_setup.sh /tmp
+RUN chmod +x /tmp/ssh_setup.sh \
+    && (sleep 1; /tmp/ssh_setup.sh 2>&1 > /dev/null)
+
+# ENV SSH_PORT is required for Azure App Service
+ENV SSH_PORT 2222
+EXPOSE 2222
+
+######################## Set up the app
+
 COPY --from=builder /app/build/libs/app.jar /app.jar
 
 ENV EMPLOYEES_URL_PROTOCOL="http"
 ENV EMPLOYEES_URL_HOST="employees"
 ENV EMPLOYEES_URL_PORT="4567"
 
+# ENV PORT is required for Azure App Service
+ENV PORT 4567
 EXPOSE 4567
 
-ENTRYPOINT ["java", \
-            "-DEMPLOYEES_URL_PROTOCOL=$EMPLOYEES_URL_PROTOCOL", \
-            "-DEMPLOYEES_URL_HOST=$EMPLOYEES_URL_HOST", \
-            "-DEMPLOYEES_URL_PORT=$EMPLOYEES_URL_PORT", \
-            "-jar", \
-            "/app.jar"]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
