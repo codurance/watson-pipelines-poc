@@ -126,9 +126,7 @@ No modules.
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| <a name="output_employees_default_hostname"></a> [employees\_default\_hostname](#output\_employees\_default\_hostname) | n/a |
+No outputs.
 <!-- END_TF_DOCS -->
 
 # Helper Commands
