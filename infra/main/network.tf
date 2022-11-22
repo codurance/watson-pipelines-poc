@@ -28,11 +28,11 @@ resource "azurerm_subnet" "integration" {
 }
 
 resource "azurerm_subnet" "endpoint" {
-  name                                           = "${local.prefix}-endpoint-sub"
-  resource_group_name                            = azurerm_resource_group.rg.name
-  virtual_network_name                           = azurerm_virtual_network.vn.name
-  address_prefixes                               = var.endpoint_sub_address_prefixes
-  enforce_private_link_endpoint_network_policies = true
+  name                                      = "${local.prefix}-endpoint-sub"
+  resource_group_name                       = azurerm_resource_group.rg.name
+  virtual_network_name                      = azurerm_virtual_network.vn.name
+  address_prefixes                          = var.endpoint_sub_address_prefixes
+  private_endpoint_network_policies_enabled = false
 }
 
 resource "azurerm_private_dns_zone" "dnsprivatezone" {
