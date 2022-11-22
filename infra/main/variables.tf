@@ -43,42 +43,6 @@ variable "private_dns_zone_name" {
   default     = "privatelink.azurewebsites.net"
 }
 
-variable "employees_url_protocol" {
-  type        = string
-  description = "The protocol used to connect to the Employees service."
-  default     = "http"
-}
-
-variable "employees_url_port" {
-  type        = string
-  description = "The port used to connect to the Employees service."
-  default     = "80"
-}
-
-variable "payroll_docker_image_name" {
-  type        = string
-  description = "The Payroll service container name."
-  default     = "payroll"
-}
-
-variable "payroll_docker_image_tag" {
-  type        = string
-  description = "The Payroll service container tag."
-  default     = "latest"
-}
-
-variable "employees_docker_image_name" {
-  type        = string
-  description = "The Employees service container name."
-  default     = "employees"
-}
-
-variable "employees_docker_image_tag" {
-  type        = string
-  description = "The Employees service container tag."
-  default     = "latest"
-}
-
 variable "vm_size" {
   type        = string
   description = "The SKU which should be used for the Virtual Machine, such as Standard_F2."

@@ -1,4 +1,9 @@
-output "public_ip_address" {
-  description = "The Primary Public IP Address assigned to this Virtual Machine."
-  value       = azurerm_linux_virtual_machine.vm.public_ip_address
+output "employees_app_svc_default_hostname" {
+  description = "The default hostname of the Employees App Service."
+  value       = azurerm_linux_web_app.employees.default_hostname
+}
+
+output "payroll_app_svc_default_hostname" {
+  description = "The default hostname of the Payroll App Service."
+  value       = azurerm_linux_web_app.payroll.default_hostname
 }

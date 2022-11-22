@@ -7,7 +7,7 @@ terraform {
   }
 }
 
-data "terraform_remote_state" "jrs" {
+data "terraform_remote_state" "trs" {
 
   backend = "azurerm"
 

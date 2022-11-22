@@ -1,66 +1,93 @@
-resource "azurerm_linux_web_app" "payroll" {
-  name                = "${local.prefix}-payroll"
+
+
+resource "azurerm_subnet" "vm_sub" {
+  name                 = "${local.prefix}-vm-sub"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = azurerm_virtual_network.vn.name
+  address_prefixes     = var.vm_sub_address_prefixes
+}
+
+resource "azurerm_public_ip" "vm_pip" {
+  name                = "${local.prefix}-vm-pip"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  allocation_method   = "Dynamic"
+}
+
+resource "azurerm_network_interface" "vm_nic" {
+  name                = "${local.prefix}-vm-nic"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  service_plan_id     = azurerm_service_plan.sp.id
 
-  site_config {
-    application_stack {
-      docker_image     = "${azurerm_container_registry.cr.login_server}/${var.payroll_docker_image_name}"
-      docker_image_tag = var.payroll_docker_image_tag
-    }
-  }
-
-  app_settings = {
-    "DOCKER_REGISTRY_SERVER_URL" : azurerm_container_registry.cr.login_server
-    "DOCKER_REGISTRY_SERVER_USERNAME" : azurerm_container_registry.cr.admin_username
-    "DOCKER_REGISTRY_SERVER_PASSWORD" : azurerm_container_registry.cr.admin_password
-    "EMPLOYEES_URL_PROTOCOL" : var.employees_url_protocol
-    "EMPLOYEES_URL_HOST" : azurerm_linux_web_app.employees.default_hostname
-    "EMPLOYEES_URL_PORT" : var.employees_url_port
+  ip_configuration {
+    name                          = "${local.prefix}-public"
+    subnet_id                     = azurerm_subnet.vm_sub.id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.vm_pip.id
   }
 }
 
-resource "azurerm_app_service_virtual_network_swift_connection" "vnintegrationconnection" {
-  app_service_id = azurerm_linux_web_app.payroll.id
-  subnet_id      = azurerm_subnet.integration.id
-}
-
-resource "azurerm_linux_web_app" "employees" {
-  name                = "${local.prefix}-employees"
+resource "azurerm_network_security_group" "vm_sg" {
+  name                = "${local.prefix}-vm-sg"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  service_plan_id     = azurerm_service_plan.sp.id
 
-  site_config {
-    application_stack {
-      docker_image     = "${azurerm_container_registry.cr.login_server}/${var.employees_docker_image_name}"
-      docker_image_tag = var.employees_docker_image_tag
-    }
+  security_rule {
+    name                       = "SSH"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
   }
 
-  app_settings = {
-    "DOCKER_REGISTRY_SERVER_URL" : azurerm_container_registry.cr.login_server
-    "DOCKER_REGISTRY_SERVER_USERNAME" : azurerm_container_registry.cr.admin_username
-    "DOCKER_REGISTRY_SERVER_PASSWORD" : azurerm_container_registry.cr.admin_password
+  security_rule {
+    name                       = "Jenkins HTTP"
+    priority                   = 200
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "8080"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
   }
 }
 
-resource "azurerm_private_endpoint" "privateendpoint" {
-  name                = "${local.prefix}-private-endpoint"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  subnet_id           = azurerm_subnet.endpoint.id
+resource "azurerm_subnet_network_security_group_association" "vm_nsga" {
+  subnet_id                 = azurerm_subnet.vm_sub.id
+  network_security_group_id = azurerm_network_security_group.vm_sg.id
+}
 
-  private_dns_zone_group {
-    name                 = "privatednszonegroup"
-    private_dns_zone_ids = [azurerm_private_dns_zone.dnsprivatezone.id]
+resource "azurerm_linux_virtual_machine" "vm" {
+  name                = "${local.prefix}-vm"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  size                = var.vm_size
+  admin_username      = var.vm_admin_username
+  network_interface_ids = [
+    azurerm_network_interface.vm_nic.id,
+  ]
+
+  admin_ssh_key {
+    username   = var.vm_admin_username
+    public_key = file("ssh-key/key.pub")
   }
 
-  private_service_connection {
-    name                           = "privateendpointconnection"
-    private_connection_resource_id = azurerm_linux_web_app.employees.id
-    subresource_names              = ["sites"]
-    is_manual_connection           = false
+  custom_data = filebase64("templates/bootstrap.tftpl")
+
+  os_disk {
+    caching              = var.vm_disk_caching
+    storage_account_type = var.vm_disk_storage_type
+  }
+
+  source_image_reference {
+    publisher = var.vm_publisher
+    offer     = var.vm_offer
+    sku       = var.vm_sku
+    version   = var.vm_version
   }
 }

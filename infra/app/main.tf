@@ -1,26 +1,66 @@
-resource "azurerm_linux_virtual_machine" "vm" {
-  name                            = "${local.prefix}-vm"
-  resource_group_name             = local.jenkins_rg_name
-  location                        = local.jenkins_rg_location
-  size                            = var.vm_size
-  admin_username                  = var.vm_admin_username
-  admin_password                  = var.admin_password
-  disable_password_authentication = false
-  network_interface_ids = [
-    azurerm_network_interface.nic.id,
-  ]
+resource "azurerm_linux_web_app" "payroll" {
+  name                = "${local.prefix}-payroll"
+  location            = local.main_resource_group_location
+  resource_group_name = local.main_resource_group_name
+  service_plan_id     = local.main_service_plan_id
 
-  custom_data = filebase64("templates/bootstrap.tftpl")
-
-  os_disk {
-    caching              = var.vm_disk_caching
-    storage_account_type = var.vm_disk_storage_type
+  site_config {
+    application_stack {
+      docker_image     = "${local.main_container_registry_login_server}/${var.payroll_docker_image_name}"
+      docker_image_tag = var.payroll_docker_image_tag
+    }
   }
 
-  source_image_reference {
-    publisher = var.vm_publisher
-    offer     = var.vm_offer
-    sku       = var.vm_sku
-    version   = var.vm_version
+  app_settings = {
+    "DOCKER_REGISTRY_SERVER_URL" : local.main_container_registry_login_server
+    "DOCKER_REGISTRY_SERVER_USERNAME" : local.main_container_registry_admin_username
+    "DOCKER_REGISTRY_SERVER_PASSWORD" : local.main_container_registry_admin_password
+    "EMPLOYEES_URL_PROTOCOL" : var.employees_url_protocol
+    "EMPLOYEES_URL_HOST" : azurerm_linux_web_app.employees.default_hostname
+    "EMPLOYEES_URL_PORT" : var.employees_url_port
+  }
+}
+
+resource "azurerm_app_service_virtual_network_swift_connection" "vnintegrationconnection" {
+  app_service_id = azurerm_linux_web_app.payroll.id
+  subnet_id      = local.main_integration_subnet_id
+}
+
+resource "azurerm_linux_web_app" "employees" {
+  name                = "${local.prefix}-employees"
+  location            = local.main_resource_group_location
+  resource_group_name = local.main_resource_group_name
+  service_plan_id     = local.main_service_plan_id
+
+  site_config {
+    application_stack {
+      docker_image     = "${local.main_container_registry_login_server}/${var.employees_docker_image_name}"
+      docker_image_tag = var.employees_docker_image_tag
+    }
+  }
+
+  app_settings = {
+    "DOCKER_REGISTRY_SERVER_URL" : local.main_container_registry_login_server
+    "DOCKER_REGISTRY_SERVER_USERNAME" : local.main_container_registry_admin_username
+    "DOCKER_REGISTRY_SERVER_PASSWORD" : local.main_container_registry_admin_password
+  }
+}
+
+resource "azurerm_private_endpoint" "privateendpoint" {
+  name                = "${local.prefix}-private-endpoint"
+  location            = local.main_resource_group_location
+  resource_group_name = local.main_resource_group_name
+  subnet_id           = local.main_endpoint_subnet_id
+
+  private_dns_zone_group {
+    name                 = "privatednszonegroup"
+    private_dns_zone_ids = [local.main_private_dns_zone_id]
+  }
+
+  private_service_connection {
+    name                           = "privateendpointconnection"
+    private_connection_resource_id = azurerm_linux_web_app.employees.id
+    subresource_names              = ["sites"]
+    is_manual_connection           = false
   }
 }
