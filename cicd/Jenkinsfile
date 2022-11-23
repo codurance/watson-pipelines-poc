@@ -139,7 +139,7 @@ pipeline {
                             string(credentialsId: 'TF_VAR_subscription_id', variable: 'TF_VAR_subscription_id'),
                             string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'),
                             string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET'),
-                            // string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'),
+                            string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'),
                             string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID') ]) {
                                 sh 'make init'
                         }
@@ -156,7 +156,7 @@ pipeline {
                             string(credentialsId: 'TF_VAR_subscription_id', variable: 'TF_VAR_subscription_id'),
                             string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'),
                             string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET'),
-                            // string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'),
+                            string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'),
                             string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID') ]) {
                                 sh 'make validate'
                         }
@@ -173,7 +173,7 @@ pipeline {
                             string(credentialsId: 'TF_VAR_subscription_id', variable: 'TF_VAR_subscription_id'),
                             string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'),
                             string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET'),
-                            // string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'),
+                            string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'),
                             string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID') ]) {
                                 sh 'make plan'
                         }
@@ -195,7 +195,7 @@ pipeline {
                             string(credentialsId: 'TF_VAR_subscription_id', variable: 'TF_VAR_subscription_id'),
                             string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'),
                             string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET'),
-                            // string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'),
+                            string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'),
                             string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID') ]) {
                                 sh 'make apply'
                         }
