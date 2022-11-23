@@ -2,15 +2,23 @@ pipeline {
     agent any
 
     parameters {
-        booleanParam(name: "CREATE_INFRA", defaultValue: true)
+        booleanParam(name: "DESTROY", defaultValue: false)
     }
 
     environment {
-        ACR_NAME = "devwatsoncr"
+        ACR_NAME = "devwatsonappsvcmaincr"
+        TF_CLI_ARGS = "-no-color"
+        TF_CLI_ARGS_apply = "-auto-approve"
+        TF_CLI_ARGS_destroy = "-auto-approve"
     }
 
     stages {
         stage('Build') {
+
+            when {
+                environment name: "DESTROY", value: "false"
+            }
+
             parallel {
                 stage('Build Employees') {
                     steps {
@@ -35,6 +43,11 @@ pipeline {
         }
 
         stage('Test') {
+
+            when {
+                environment name: "DESTROY", value: "false"
+            }
+
             parallel {
                 stage('Test Employees') {
                     steps {
@@ -59,6 +72,11 @@ pipeline {
         }
 
         stage('Container registry Login') {
+
+            when {
+                environment name: "DESTROY", value: "false"
+            }
+
             steps {
                 script {
                     withCredentials([
@@ -73,6 +91,10 @@ pipeline {
         }
 
         stage('Deploy Containers') {
+
+            when {
+                environment name: "DESTROY", value: "false"
+            }
 
             parallel {
                 stage('Deploy Employees') {
@@ -109,25 +131,97 @@ pipeline {
             }
         }
 
-        stage('Create Infra') {
-            when {
-                environment name: "CREATE_INFRA", value: "true"
-            }
-
+        stage('Initialize') {
             steps {
-                input 'Start?'
-                build job: 'infra'
+                script {
+                    dir('infra/app') {
+                        withCredentials([
+                            string(credentialsId: 'TF_VAR_subscription_id', variable: 'TF_VAR_subscription_id'),
+                            string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'),
+                            string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET'),
+                            // string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'),
+                            string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID') ]) {
+                                sh 'make init'
+                        }
+                    }
+                }
             }
         }
 
-        stage('Deploy') {
+        stage('Validate') {
             steps {
-                input 'Start?'
                 script {
-                    sh 'mkdir -p /var/lib/jenkins/.ssh'
-                    sh 'touch /var/lib/jenkins/.ssh/known_hosts'
-                    sh 'ssh-keyscan -H dev-watson-app-vm >> /var/lib/jenkins/.ssh/known_hosts'
-                    sh 'ansible-playbook cicd/playbooks/playbook.yml -i cicd/playbooks/inventory.ini -e "ansible_ssh_password=P4ssword"'
+                    dir('infra/app') {
+                        withCredentials([
+                            string(credentialsId: 'TF_VAR_subscription_id', variable: 'TF_VAR_subscription_id'),
+                            string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'),
+                            string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET'),
+                            // string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'),
+                            string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID') ]) {
+                                sh 'make validate'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Plan') {
+            steps {
+                script {
+                    dir('infra/app') {
+                        withCredentials([
+                            string(credentialsId: 'TF_VAR_subscription_id', variable: 'TF_VAR_subscription_id'),
+                            string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'),
+                            string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET'),
+                            // string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'),
+                            string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID') ]) {
+                                sh 'make plan'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Apply') {
+
+            when {
+                environment name: "DESTROY", value: "false"
+            }
+
+            steps {
+                script {
+                    dir('infra/app') {
+                        withCredentials([
+                            string(credentialsId: 'TF_VAR_subscription_id', variable: 'TF_VAR_subscription_id'),
+                            string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'),
+                            string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET'),
+                            // string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'),
+                            string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID') ]) {
+                                sh 'make apply'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Destroy') {
+
+            when {
+                environment name: "DESTROY", value: "true"
+            }
+
+            steps {
+                script {
+                    dir('infra/app') {
+                        withCredentials([
+                            string(credentialsId: 'TF_VAR_subscription_id', variable: 'TF_VAR_subscription_id'),
+                            string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'),
+                            string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET'),
+                            string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'),
+                            string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID') ]) {
+                                sh 'make destroy'
+                        }
+                    }
                 }
             }
         }
