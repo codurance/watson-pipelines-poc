@@ -39,24 +39,10 @@ Create the environment:
 make apply
 ```
 
-# Create a Multi-Container App Service with the AZ CLI
+# SSH Into the Azure VM Hosting Jenkins
 
 ```bash
-az acr login --name devwatsonappsvccr.azurecr.io
-
-docker build -t devwatsonappsvccr.azurecr.io/employees employees
-
-docker build -t devwatsonappsvccr.azurecr.io/payroll payroll
-
-docker push devwatsonappsvccr.azurecr.io/employees
-
-docker push devwatsonappsvccr.azurecr.io/payroll
-
-az webapp create --resource-group dev-watson-app-svc-rg --plan dev-watson-app-svc-sp --name dev-watson-app-svc --multicontainer-config-type compose --multicontainer-config-file docker-compose-app-service.yml
-
-az webapp config container set --docker-registry-server-url devwatsonappsvccr.azurecr.io --name dev-watson-app-svc --resource-group dev-watson-app-svc-rg
-
-az webapp delete --name dev-watson-app-svc --resource-group dev-watson-app-svc-rg --keep-empty-plan
+ssh -i ssh-key/key <VM_ADMIN_USERNAME>@<PUBLIC_IP>
 ```
 
 # Destroy the Azure Infra
@@ -146,6 +132,24 @@ No modules.
 <!-- END_TF_DOCS -->
 
 # Helper Commands
+
+## List Available Ubuntu Images
+
+If you decide to change the VM Ubuntu distribution, you can use the following command to find available images:
+
+```bash
+az vm image list --all --publisher Canonical
+```
+
+## Generate New SSH Key
+
+If you would like to create a new SSH key, run the following commands:
+
+```bash
+ssh-keygen -t rsa -b 4096 -f ssh-key/key -N '' -C 'key'
+
+chmod 400 ssh-key/key*
+```
 
 ## Regenerate the Terraform Argument Reference
 
