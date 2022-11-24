@@ -154,7 +154,7 @@ pipeline {
             }
         }
 
-        stage('Tear down') {
+        stage('Tear Down') {
 
             when {
                 environment name: "TEAR_DOWN", value: "true"
