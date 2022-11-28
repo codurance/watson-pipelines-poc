@@ -121,6 +121,11 @@ pipeline {
         }
 
         stage('Deploy') {
+
+            environment {
+                ANSIBLE_HOST_KEY_CHECKING = "False"
+            }
+
             steps {
                 input 'Start?'
                 script {
