@@ -1,15 +1,15 @@
 #!make
 export TF_VAR_environment := dev
-export TF_VAR_project := watson-app-svc-main
+export TF_VAR_project := watson-aci-main
 
 # State Variables
 # STATE_PREFIX := ${TF_VAR_environment}-${TF_VAR_project}
 STATE_PREFIX := ${TF_VAR_environment}-watson
 export STATE_RESOURCE_GROUP_NAME := ${STATE_PREFIX}-infrastate-rg
 export STATE_LOCATION := uksouth
-export STATE_STORAGE_ACCOUNT_NAME := ${TF_VAR_environment}watsonappsvcstate
-export STATE_MAIN_CONTAINER_NAME := ${STATE_PREFIX}-app-svc-main-infrastate
-export STATE_APP_SVC_CONTAINER_NAME := ${STATE_PREFIX}-app-svc-app-infrastate
+export STATE_STORAGE_ACCOUNT_NAME := ${TF_VAR_environment}watsonacistate
+export STATE_MAIN_CONTAINER_NAME := ${STATE_PREFIX}-aci-main-infrastate
+export STATE_APP_SVC_CONTAINER_NAME := ${STATE_PREFIX}-aci-app-infrastate
 
 default: init validate plan
 
