@@ -1,19 +1,3 @@
-resource "azurerm_container_registry" "cr" {
-  name                = replace("${local.prefix}-cr", "-", "")
-  resource_group_name = var.resource_group_name
-  location            = var.resource_group_location
-  sku                 = "Basic"
-  admin_enabled       = true
-}
-
-resource "azurerm_service_plan" "sp" {
-  name                = "${local.prefix}-sp"
-  resource_group_name = var.resource_group_name
-  location            = var.resource_group_location
-  os_type             = "Linux"
-  sku_name            = "B1"
-}
-
 resource "azurerm_virtual_network" "vn" {
   name                = "${local.prefix}-vn"
   location            = var.resource_group_location
