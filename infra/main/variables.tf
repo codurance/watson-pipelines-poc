@@ -62,6 +62,12 @@ variable "vm_sub_address_prefixes" {
   default     = ["10.0.200.0/24"]
 }
 
+variable "bastion_sub_address_prefixes" {
+  type        = list(string)
+  description = "The address prefixes of the Bastion subnet."
+  default     = ["10.0.210.0/24"]
+}
+
 variable "vm_size" {
   type        = string
   description = "The SKU which should be used for the Virtual Machine, such as Standard_F2."
