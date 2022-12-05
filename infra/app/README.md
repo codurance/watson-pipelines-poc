@@ -75,6 +75,7 @@ No modules.
 |------|------|
 | [azurerm_linux_web_app.employees](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_web_app) | resource |
 | [azurerm_private_endpoint.privateendpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) | resource |
+| [azurerm_private_endpoint.vmprivateendpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) | resource |
 
 ## Inputs
 
@@ -89,7 +90,6 @@ No modules.
 | <a name="input_employees_docker_image_tag"></a> [employees\_docker\_image\_tag](#input\_employees\_docker\_image\_tag) | The Employees service container tag. | `string` | `"latest"` | no |
 | <a name="input_endpoint_subnet_id"></a> [endpoint\_subnet\_id](#input\_endpoint\_subnet\_id) | The endpoint subnet id from the main infra. | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment name. | `string` | n/a | yes |
-| <a name="input_integration_subnet_id"></a> [integration\_subnet\_id](#input\_integration\_subnet\_id) | The integration subnet id from the main infra. | `string` | n/a | yes |
 | <a name="input_private_dns_zone_id"></a> [private\_dns\_zone\_id](#input\_private\_dns\_zone\_id) | The the private dns zone id from the main infra. | `string` | n/a | yes |
 | <a name="input_project"></a> [project](#input\_project) | The project name. | `string` | n/a | yes |
 | <a name="input_resource_group_location"></a> [resource\_group\_location](#input\_resource\_group\_location) | The resource group location. | `string` | n/a | yes |
@@ -97,6 +97,7 @@ No modules.
 | <a name="input_service_plan_id"></a> [service\_plan\_id](#input\_service\_plan\_id) | The service plan ID from the main infra. | `string` | n/a | yes |
 | <a name="input_subscription_id"></a> [subscription\_id](#input\_subscription\_id) | The Azure account subscription id. | `string` | n/a | yes |
 | <a name="input_tenant_id"></a> [tenant\_id](#input\_tenant\_id) | The Azure Service Principal tenant id. | `string` | n/a | yes |
+| <a name="input_vm_subnet_id"></a> [vm\_subnet\_id](#input\_vm\_subnet\_id) | The vm subnet id from the main infra. | `string` | n/a | yes |
 
 ## Outputs
 

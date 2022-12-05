@@ -5,20 +5,6 @@ resource "azurerm_virtual_network" "vn" {
   address_space       = var.address_space
 }
 
-resource "azurerm_subnet" "integration" {
-  name                 = "${local.prefix}-integration-sub"
-  resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.vn.name
-  address_prefixes     = var.integration_sub_address_prefixes
-
-  delegation {
-    name = "delegation"
-    service_delegation {
-      name = "Microsoft.Web/serverFarms"
-    }
-  }
-}
-
 resource "azurerm_subnet" "endpoint" {
   name                                      = "${local.prefix}-endpoint-sub"
   resource_group_name                       = var.resource_group_name
@@ -28,7 +14,7 @@ resource "azurerm_subnet" "endpoint" {
 }
 
 resource "azurerm_private_dns_zone" "dnsprivatezone" {
-  name                = "${local.prefix}.azurewebsites.net"
+  name                = "privatelink.azurewebsites.net"
   resource_group_name = var.resource_group_name
 }
 

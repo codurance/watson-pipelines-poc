@@ -40,18 +40,6 @@ variable "tenant_id" {
 #   default     = "80"
 # }
 
-# variable "payroll_docker_image_name" {
-#   type        = string
-#   description = "The Payroll service container name."
-#   default     = "payroll"
-# }
-
-# variable "payroll_docker_image_tag" {
-#   type        = string
-#   description = "The Payroll service container tag."
-#   default     = "latest"
-# }
-
 variable "employees_docker_image_name" {
   type        = string
   description = "The Employees service container name."
@@ -114,14 +102,14 @@ variable "container_registry_admin_password" {
   description = "The container registry admin password from the main infra."
 }
 
-variable "integration_subnet_id" {
-  type        = string
-  description = "The integration subnet id from the main infra."
-}
-
 variable "endpoint_subnet_id" {
   type        = string
   description = "The endpoint subnet id from the main infra."
+}
+
+variable "vm_subnet_id" {
+  type        = string
+  description = "The vm subnet id from the main infra."
 }
 
 variable "private_dns_zone_id" {

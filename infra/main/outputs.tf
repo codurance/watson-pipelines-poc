@@ -20,14 +20,14 @@ output "container_registry_admin_password" {
   sensitive   = true
 }
 
-output "integration_subnet_id" {
-  description = "The integration subnet ID."
-  value       = azurerm_subnet.integration.id
-}
-
 output "endpoint_subnet_id" {
   description = "The endpoint subnet ID."
   value       = azurerm_subnet.endpoint.id
+}
+
+output "vm_subnet_id" {
+  description = "The vm subnet ID."
+  value       = azurerm_subnet.vm_sub.id
 }
 
 output "private_dns_zone_id" {
