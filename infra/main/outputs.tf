@@ -23,3 +23,13 @@ output "container_registry_admin_password" {
   value       = azurerm_container_registry.cr.admin_password
   sensitive   = true
 }
+
+output "dns_zone_name" {
+  description = "DNS zone name to use."
+  value       = azurerm_private_dns_zone.pdz.name
+}
+
+output "subnet_id" {
+  description = "DNS zone name to use."
+  value       = azurerm_subnet.sub.id
+}

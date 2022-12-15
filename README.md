@@ -22,7 +22,7 @@
 
 **TODO**
 
-![Azure Infra](docs/infra.jpg)
+<!-- ![Azure Infra](docs/infra.jpg) -->
 
 # Tear Down the App Services
 

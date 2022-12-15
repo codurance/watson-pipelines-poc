@@ -63,3 +63,18 @@ variable "employees_docker_image_tag" {
   description = "The Employees service container tag."
   default     = "latest"
 }
+
+variable "client_id" {
+  type        = string
+  description = "Sidecar's service principal client id"
+}
+
+variable "client_secret" {
+  type        = string
+  description = "Sidecar's service principal client secret"
+}
+
+variable "tenant_id" {
+  type        = string
+  description = "Sidecar's service principal tenant id"
+}

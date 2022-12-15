@@ -1,10 +1,11 @@
 #!make
 export TF_VAR_environment := dev
-export TF_VAR_project := watson-aci-main
+export TF_VAR_project := watson-aci
 
 # State Variables
-# STATE_PREFIX := ${TF_VAR_environment}-${TF_VAR_project}
 STATE_PREFIX := ${TF_VAR_environment}-watson
+
+# Remote State Variables
 export STATE_RESOURCE_GROUP_NAME := ${STATE_PREFIX}-infrastate-rg
 export STATE_LOCATION := uksouth
 export STATE_STORAGE_ACCOUNT_NAME := ${TF_VAR_environment}watsonacistate

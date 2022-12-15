@@ -1,66 +1,48 @@
-resource "azurerm_linux_web_app" "payroll" {
-  name                = "${local.prefix}-payroll"
-  location            = local.main_resource_group_location
-  resource_group_name = local.main_resource_group_name
-  service_plan_id     = local.main_service_plan_id
+resource "azurerm_container_group" "employees" {
+  name                = "${local.prefix}-aci-employees"
+  resource_group_name = local.main.resource_group.name
+  location            = local.main.resource_group.location
+  ip_address_type     = "Private"
+  os_type             = "Linux"
+  restart_policy      = "OnFailure"
 
-  site_config {
-    application_stack {
-      docker_image     = "${local.main_container_registry_login_server}/${var.payroll_docker_image_name}"
-      docker_image_tag = var.payroll_docker_image_tag
+  image_registry_credential {
+    server   = local.main.container_registry.server
+    username = local.main.container_registry.username
+    password = local.main.container_registry.password
+  }
+
+  container {
+    name   = "employees"
+    image  = "${local.main.container_registry.server}/employees:latest"
+    cpu    = "0.5"
+    memory = "1.5"
+
+    ports {
+      port     = 4567
+      protocol = "TCP"
     }
   }
 
-  app_settings = {
-    "DOCKER_REGISTRY_SERVER_URL" : local.main_container_registry_login_server
-    "DOCKER_REGISTRY_SERVER_USERNAME" : local.main_container_registry_admin_username
-    "DOCKER_REGISTRY_SERVER_PASSWORD" : local.main_container_registry_admin_password
-    "EMPLOYEES_URL_PROTOCOL" : var.employees_url_protocol
-    "EMPLOYEES_URL_HOST" : azurerm_linux_web_app.employees.default_hostname
-    "EMPLOYEES_URL_PORT" : var.employees_url_port
-  }
-}
+  container {
+    name   = "sidecar"
+    image  = "${local.main.container_registry.server}/sidecar:latest"
+    cpu    = "0.5"
+    memory = "1.5"
 
-resource "azurerm_app_service_virtual_network_swift_connection" "vnintegrationconnection" {
-  app_service_id = azurerm_linux_web_app.payroll.id
-  subnet_id      = local.main_integration_subnet_id
-}
+    environment_variables = {
+      "ACI_INSTANCE_NAME" : "${local.prefix}-aci-employees"
+      "RESOURCE_GROUP" : local.main.resource_group.name
+      "A_RECORD_NAME" : "${local.prefix}-employees"
+      "DNS_ZONE_NAME" : local.main.dns_zone_name
+    }
 
-resource "azurerm_linux_web_app" "employees" {
-  name                = "${local.prefix}-employees"
-  location            = local.main_resource_group_location
-  resource_group_name = local.main_resource_group_name
-  service_plan_id     = local.main_service_plan_id
-
-  site_config {
-    application_stack {
-      docker_image     = "${local.main_container_registry_login_server}/${var.employees_docker_image_name}"
-      docker_image_tag = var.employees_docker_image_tag
+    secure_environment_variables = {
+      "APP_ID" : var.client_id
+      "APP_PASSWORD" : var.client_secret
+      "APP_TENANT_ID" : var.tenant_id
     }
   }
 
-  app_settings = {
-    "DOCKER_REGISTRY_SERVER_URL" : local.main_container_registry_login_server
-    "DOCKER_REGISTRY_SERVER_USERNAME" : local.main_container_registry_admin_username
-    "DOCKER_REGISTRY_SERVER_PASSWORD" : local.main_container_registry_admin_password
-  }
-}
-
-resource "azurerm_private_endpoint" "privateendpoint" {
-  name                = "${local.prefix}-private-endpoint"
-  location            = local.main_resource_group_location
-  resource_group_name = local.main_resource_group_name
-  subnet_id           = local.main_endpoint_subnet_id
-
-  private_dns_zone_group {
-    name                 = "privatednszonegroup"
-    private_dns_zone_ids = [local.main_private_dns_zone_id]
-  }
-
-  private_service_connection {
-    name                           = "privateendpointconnection"
-    private_connection_resource_id = azurerm_linux_web_app.employees.id
-    subresource_names              = ["sites"]
-    is_manual_connection           = false
-  }
+  subnet_ids = [local.main.subnet_id]
 }

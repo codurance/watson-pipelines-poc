@@ -1,25 +1,24 @@
 #!make
 export TF_VAR_environment := dev
-export TF_VAR_project := watson-app-svc-app
+export TF_VAR_project := watson-aci
 
 # State Variables
-PREFIX := ${TF_VAR_environment}-${TF_VAR_project}
-STATE_CONTAINER_NAME := ${PREFIX}-infrastate
+STATE_PREFIX := ${TF_VAR_environment}-watson
 
 # Remote State Variables
-MAIN_PROJECT := watson-app-svc-main
-MAIN_REMOTE_STATE_PREFIX := ${TF_VAR_environment}-${MAIN_PROJECT}
-export TF_VAR_main_remote_state_resource_group_name := ${TF_VAR_environment}-watson-infrastate-rg
-export TF_VAR_main_remote_state_storage_account_name := ${TF_VAR_environment}watsonappsvcstate
-export TF_VAR_main_remote_state_container_name := ${MAIN_REMOTE_STATE_PREFIX}-infrastate
+export STATE_RESOURCE_GROUP_NAME := ${STATE_PREFIX}-infrastate-rg
+export STATE_LOCATION := uksouth
+export STATE_STORAGE_ACCOUNT_NAME := ${TF_VAR_environment}watsonacistate
+export STATE_MAIN_CONTAINER_NAME := ${STATE_PREFIX}-aci-main-infrastate
+export STATE_APP_SVC_CONTAINER_NAME := ${STATE_PREFIX}-aci-app-infrastate
 
 default: init validate plan
 
 init:
 	terraform init \
-		-backend-config "resource_group_name=${TF_VAR_main_remote_state_resource_group_name}" \
-		-backend-config "storage_account_name=${TF_VAR_main_remote_state_storage_account_name}" \
-		-backend-config "container_name=${STATE_CONTAINER_NAME}"
+		-backend-config "resource_group_name=${STATE_RESOURCE_GROUP_NAME}" \
+		-backend-config "storage_account_name=${STATE_STORAGE_ACCOUNT_NAME}" \
+		-backend-config "container_name=${STATE_APP_SVC_CONTAINER_NAME}"
 
 validate:
 	terraform validate
