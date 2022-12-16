@@ -5,6 +5,7 @@ module "employees" {
   resource_group     = local.main.resource_group
   subnet_id          = local.main.subnet_id
   dns_zone_name      = local.main.dns_zone_name
+  dns_record_name    = "${local.prefix}-acg-employees"
   container_registry = local.main.container_registry
 
   # TODO: use managed identity instead of managing another service principal

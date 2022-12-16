@@ -97,6 +97,11 @@ variable "dns_zone_name" {
   description = "Private dns zone name to register the service."
 }
 
+variable "dns_record_name" {
+  type        = string
+  description = "DNS record name."
+}
+
 variable "client_id" {
   type        = string
   description = "Sidecar's service principal client id."

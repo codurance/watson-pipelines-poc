@@ -43,7 +43,7 @@ resource "azurerm_container_group" "acg" {
     environment_variables = {
       "ACI_INSTANCE_NAME" : local.name
       "RESOURCE_GROUP" : var.resource_group.name
-      "A_RECORD_NAME" : local.name
+      "A_RECORD_NAME" : var.dns_record_name
       "DNS_ZONE_NAME" : var.dns_zone_name
     }
 
