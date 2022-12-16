@@ -1,24 +1,23 @@
-module "container" {
+module "employees" {
   source = "./modules/container"
 
   prefix             = local.prefix
   resource_group     = local.main.resource_group
+  subnet_id          = local.main.subnet_id
+  dns_zone_name      = local.main.dns_zone_name
   container_registry = local.main.container_registry
-
-  name = "employees"
-  ports = [{
-    number   = 4567
-    protocol = "TCP"
-  }]
-  docker_image_name = "employees"
-
-  dns_zone_name = local.main.dns_zone_name
-  subnet_id     = local.main.subnet_id
 
   # TODO: use managed identity instead of managing another service principal
   client_id     = var.client_id
   client_secret = var.client_secret
   tenant_id     = var.tenant_id
+
+  name              = "employees"
+  docker_image_name = "employees"
+  ports = [{
+    number   = 4567
+    protocol = "TCP"
+  }]
 }
 
 # resource "azurerm_subnet" "frontend" {
