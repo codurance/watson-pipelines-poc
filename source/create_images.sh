@@ -6,7 +6,7 @@ print_help() {
   echo "Script usage: $(basename "$0") [-r] <acr_registry_name|acr_registry_login_server>" >&2
 }
 
-if [ $OPTIND = 0 ]; then
+if [ $# = 0 ]; then
   print_help
   exit 1
 fi
@@ -48,4 +48,4 @@ acr_login "$REGISTRY"
 echo "Building images..."
 build_image "$(dirname "$0")/employees" "$REGISTRY.azurecr.io/employees"
 build_image "$(dirname "$0")/payroll" "$REGISTRY.azurecr.io/payroll"
-build_image "$(dirname "$0")/sidecar" "$REGISTRY.azurecr.io/sidecar"
+build_image "$(dirname "$0")/dns_sidecar" "$REGISTRY.azurecr.io/dns_sidecar"
